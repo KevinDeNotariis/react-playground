@@ -22,9 +22,18 @@ interface ContentsProps {
   nextHandler: Function;
   prevHandler: Function;
   fieldHandler: Function;
+  submitHandler: Function;
+  submitButtonEnabled: boolean;
 }
 
-const Contents = ({ state, nextHandler, prevHandler, fieldHandler }: ContentsProps) => (
+const Contents = ({
+  state,
+  nextHandler,
+  prevHandler,
+  fieldHandler,
+  submitHandler,
+  submitButtonEnabled,
+}: ContentsProps) => (
   <Container>
     {state.selected === 0 && (
       <ContentStep1
@@ -47,6 +56,8 @@ const Contents = ({ state, nextHandler, prevHandler, fieldHandler }: ContentsPro
         prevHandler={prevHandler}
         additionalNotes={state.additionalNotes}
         fieldHandler={fieldHandler}
+        submitHandler={submitHandler}
+        submitButtonEnabled={submitButtonEnabled}
       />
     )}
   </Container>

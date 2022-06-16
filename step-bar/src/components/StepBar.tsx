@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { StepType, StepBarState } from '../types';
 import Step from './Step';
@@ -38,6 +38,7 @@ const StepBar = () => {
     email: '',
     additionalNotes: '',
   });
+  const [submitButtonEnabled, setSubmitButtonEnabled] = useState(false);
 
   const nextSelected = () => {
     setState((curr) => {
@@ -63,13 +64,36 @@ const StepBar = () => {
     });
   };
 
+  const submitHandler = () => {
+    console.log('payload: ', state);
+  };
+
+  useEffect(() => {
+    if (
+      state.email !== '' &&
+      state.password !== '' &&
+      state.additionalNotes !== '' &&
+      state.username !== ''
+    ) {
+      setSubmitButtonEnabled(() => true);
+    } else {
+      setSubmitButtonEnabled(() => false);
+    }
+  }, [state.email, state.password, state.additionalNotes, state.username]);
+
   return (
     <>
       <Container>
         {steps.map((step, index) => (
           <Item key={step.name}>
-            <Step name={step.name} selected={state.selected === index} />
-            {index !== steps.length - 1 ? <StepConnection /> : null}
+            <Step
+              name={step.name}
+              selected={state.selected === index}
+              completed={state.selected > index}
+            />
+            {index !== steps.length - 1 ? (
+              <StepConnection highlight={state.selected > index} />
+            ) : null}
           </Item>
         ))}
       </Container>
@@ -78,6 +102,8 @@ const StepBar = () => {
         nextHandler={nextSelected}
         prevHandler={prevSelected}
         fieldHandler={fieldHandler}
+        submitHandler={submitHandler}
+        submitButtonEnabled={submitButtonEnabled}
       />
     </>
   );
